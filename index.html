@@ -17,14 +17,9 @@
         --muted: rgba(235, 241, 255, 0.66);
         --line: rgba(255, 255, 255, 0.12);
         --line2: rgba(255, 255, 255, 0.08);
-        --glass: rgba(255, 255, 255, 0.08);
-        --glass2: rgba(255, 255, 255, 0.12);
         --blue: #8bc9ff;
         --green: #8ef0c8;
         --danger: #ff8da0;
-        --radius-xl: 30px;
-        --radius-lg: 24px;
-        --radius-md: 18px;
         --shadow: 0 24px 60px rgba(0, 0, 0, 0.36);
       }
 
@@ -128,10 +123,8 @@
         align-items: center;
       }
 
-      .btn,
       .icon-btn,
       .chip-btn,
-      .composer-icon,
       .fab {
         border: 0;
         color: var(--text);
@@ -160,6 +153,10 @@
       .phone {
         position: relative;
         min-height: calc(100vh - 74px);
+      }
+
+      .export-stage {
+        border-radius: 34px;
       }
 
       .header {
@@ -204,7 +201,8 @@
         font-weight: 800;
       }
 
-      .avatar img {
+      .avatar img,
+      .member-avatar img {
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -339,13 +337,6 @@
         margin-bottom: 5px;
       }
 
-      .member-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-      }
-
       .bubble-wrap {
         max-width: 82%;
         min-width: 78px;
@@ -434,11 +425,26 @@
       }
 
       .media-box {
-        height: 150px;
+        width: 100%;
+        min-width: 180px;
+        max-width: 260px;
         border-radius: 18px;
         background: rgba(255, 255, 255, 0.08);
         border: 1px solid rgba(255, 255, 255, 0.1);
         margin-bottom: 8px;
+        overflow: hidden;
+      }
+
+      .media-box img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+        max-height: 320px;
+      }
+
+      .media-placeholder {
+        height: 150px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -703,7 +709,7 @@
         border: 1px solid rgba(255, 255, 255, 0.08);
       }
 
-      .member-card input {
+      .member-card input[type="text"] {
         flex: 1;
         background: transparent;
         border: 0;
@@ -755,6 +761,13 @@
         padding: 10px 12px;
         position: relative;
         overflow: hidden;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(20px) saturate(1.1);
+        -webkit-backdrop-filter: blur(20px) saturate(1.1);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow:
+          0 18px 40px rgba(0, 0, 0, 0.26),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
       }
 
       .liquid-pill::before {
@@ -773,16 +786,6 @@
             transparent 30%
           );
         pointer-events: none;
-      }
-
-      .liquid-pill {
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(20px) saturate(1.1);
-        -webkit-backdrop-filter: blur(20px) saturate(1.1);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        box-shadow:
-          0 18px 40px rgba(0, 0, 0, 0.26),
-          inset 0 1px 0 rgba(255, 255, 255, 0.1);
       }
 
       .liquid-btn {
@@ -804,7 +807,7 @@
         font-size: 24px;
       }
 
-      #voiceBtn {
+      #sendBtn {
         background: linear-gradient(
           135deg,
           rgba(50, 130, 255, 0.85),
@@ -846,6 +849,34 @@
         color: rgba(255, 255, 255, 0.55);
       }
 
+      .mini-bar {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+        align-items: center;
+      }
+
+      .mini-select {
+        flex: 1;
+        height: 40px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+        padding: 0 12px;
+      }
+
+      .mini-btn {
+        height: 40px;
+        border-radius: 14px;
+        border: 0;
+        padding: 0 12px;
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
       @media (max-width: 390px) {
         .app {
           padding-left: 8px;
@@ -871,7 +902,7 @@
   </head>
   <body>
     <div class="app">
-      <div class="topbar">
+      <div class="topbar" id="editorTopbar">
         <div class="brand">
           <div class="brand-title">Fake Chat Generator</div>
           <div class="brand-sub">Liquid glass mobile editor</div>
@@ -883,74 +914,75 @@
       </div>
 
       <div class="phone">
-        <div class="header glass">
-          <button class="header-main" id="openSettingsBtn">
-            <div class="avatar" id="headerAvatar">SC</div>
-            <div style="min-width: 0">
-              <div class="header-title" id="headerTitle">
-                Studio Concept Team
+        <div class="export-stage" id="exportStage">
+          <div class="header glass">
+            <button class="header-main" id="openSettingsBtn">
+              <div class="avatar" id="headerAvatar">SC</div>
+              <div style="min-width: 0">
+                <div class="header-title" id="headerTitle">Study Reminder</div>
+                <div class="header-sub" id="headerSubtitle">sky, You</div>
               </div>
-              <div class="header-sub" id="headerSubtitle">
-                Ali, Budi, Rara +2
-              </div>
+            </button>
+            <div class="header-actions">
+              <button class="icon-btn glass-soft" id="openMembersBtn">
+                👥
+              </button>
+              <button class="icon-btn glass-soft">📞</button>
+              <button class="icon-btn glass-soft">🎥</button>
             </div>
-          </button>
-          <div class="header-actions">
-            <button class="icon-btn glass-soft" id="openMembersBtn">👥</button>
-            <button class="icon-btn glass-soft">📞</button>
-            <button class="icon-btn glass-soft">🎥</button>
+          </div>
+
+          <div class="capture" id="captureArea">
+            <div class="wallpaper" id="wallpaper"></div>
+            <div class="overlay-noise"></div>
+            <div class="conversation" id="conversation"></div>
+
+            <div class="composer-bar" id="composerBar">
+              <button class="liquid-btn" id="plusBtn">＋</button>
+
+              <div class="liquid-pill">
+                <textarea
+                  class="composer-real-input"
+                  id="composerInput"
+                  rows="1"
+                  placeholder="Type a message"
+                ></textarea>
+                <button
+                  class="composer-icon-btn"
+                  id="galleryBtn"
+                  title="Pilih gambar"
+                >
+                  🖼
+                </button>
+              </div>
+
+              <button class="liquid-btn" id="sendBtn">➤</button>
+            </div>
           </div>
         </div>
 
-        <div class="capture" id="captureArea">
-          <div class="wallpaper" id="wallpaper"></div>
-          <div class="overlay-noise"></div>
+        <div class="mini-bar">
+          <select id="directionSelect" class="mini-select">
+            <option value="outgoing">You</option>
+            <option value="incoming">Other user</option>
+          </select>
 
-          <div class="conversation" id="conversation"></div>
+          <select id="senderSelect" class="mini-select"></select>
+          <button class="mini-btn" id="quickAddUserBtn">+ User</button>
 
-          <div class="composer-bar" id="composerBar">
-            <button class="composer-side-btn liquid-btn" id="plusBtn">
-              ＋
-            </button>
-
-            <div class="composer-pill liquid-pill">
-              <button class="composer-icon-btn" id="emojiBtn">☺</button>
-              <textarea
-                class="composer-real-input"
-                id="composerInput"
-                rows="1"
-                placeholder="Type a message"
-              ></textarea>
-              <button class="composer-icon-btn hidden" id="cameraBtn">
-                📷
-              </button>
-            </div>
-
-            <button class="composer-side-btn liquid-btn" id="voiceBtn">
-              🎤
-            </button>
-
-            <div class="hidden">
-              <select id="directionSelect">
-                <option value="outgoing">My message</option>
-                <option value="incoming">Other message</option>
-              </select>
-
-              <select id="senderSelect"></select>
-
-              <select id="typeSelect">
-                <option value="text">Text</option>
-                <option value="image">Image</option>
-                <option value="voice">Voice</option>
-                <option value="typing">Typing</option>
-                <option value="date">Date</option>
-                <option value="system">System</option>
-              </select>
-            </div>
-          </div>
+          <select id="typeSelect" class="hidden">
+            <option value="text">Text</option>
+            <option value="image">Image</option>
+            <option value="voice">Voice</option>
+            <option value="typing">Typing</option>
+            <option value="date">Date</option>
+            <option value="system">System</option>
+          </select>
         </div>
       </div>
     </div>
+
+    <input type="file" accept="image/*" id="messageImageInput" class="hidden" />
 
     <div class="inline-toolbar glass" id="inlineToolbar">
       <button class="small-chip" id="toolbarEdit">Edit</button>
@@ -968,6 +1000,16 @@
       <div class="field">
         <label class="label">Text / caption</label>
         <textarea class="textarea" id="msgText"></textarea>
+      </div>
+
+      <div class="field" id="msgImageField">
+        <label class="label">Ganti gambar</label>
+        <input
+          class="file-input"
+          type="file"
+          accept="image/*"
+          id="msgImageUpload"
+        />
       </div>
 
       <div class="row2">
@@ -1059,7 +1101,7 @@
 
     <div class="sheet glass" id="membersSheet">
       <div class="sheet-handle"></div>
-      <div class="sheet-title">Group members</div>
+      <div class="sheet-title">Participants</div>
       <div class="members-list" id="membersList"></div>
       <div class="actions-grid">
         <button class="sheet-btn" id="addMemberBtn">Add member</button>
@@ -1072,15 +1114,14 @@
         conversation: {
           id: "conv-1",
           type: "group",
-          title: "Studio Concept Team",
-          subtitle: "Ali, Budi, Rara +2",
+          title: "New Group",
+          subtitle: "Ali, Budi +1",
           avatarUrl: "",
           backgroundUrl: "",
           members: [
             { id: "self", name: "You", color: "#8ef0c8", avatarUrl: "" },
             { id: "m1", name: "Ali", color: "#8bc9ff", avatarUrl: "" },
-            { id: "m2", name: "Budi", color: "#f6b6ff", avatarUrl: "" },
-            { id: "m3", name: "Rara", color: "#ffd67d", avatarUrl: "" },
+            { id: "m2", name: "Budi", color: "#ffd67d", avatarUrl: "" },
           ],
           messages: [
             { id: "msg1", type: "date", text: "Today" },
@@ -1089,54 +1130,18 @@
               type: "text",
               direction: "incoming",
               memberId: "m1",
-              text: "Halo semua, review UI jadi jam 10 ya.",
-              time: "09:12",
+              text: "Halo 👋",
+              time: "10:04",
               status: "sent",
             },
             {
               id: "msg3",
               type: "text",
-              direction: "incoming",
-              memberId: "m2",
-              text: "Siap. Aku bawa revisi bubble dan composer bar.",
-              time: "09:13",
-              status: "sent",
-            },
-            {
-              id: "msg4",
-              type: "text",
               direction: "outgoing",
               memberId: "self",
-              text: "Oke, sekalian finalin export dan group flow.",
-              time: "09:14",
+              text: "yes",
+              time: "14:32",
               status: "read",
-            },
-            {
-              id: "msg5",
-              type: "image",
-              direction: "incoming",
-              memberId: "m3",
-              text: "Preview concept image",
-              time: "09:17",
-              status: "sent",
-            },
-            {
-              id: "msg6",
-              type: "voice",
-              direction: "outgoing",
-              memberId: "self",
-              text: "0:12",
-              time: "09:18",
-              status: "delivered",
-            },
-            {
-              id: "msg7",
-              type: "typing",
-              direction: "incoming",
-              memberId: "m1",
-              text: "",
-              time: "",
-              status: "sent",
             },
           ],
         },
@@ -1159,6 +1164,7 @@
       const senderSelect = document.getElementById("senderSelect");
       const typeSelect = document.getElementById("typeSelect");
       const composerInput = document.getElementById("composerInput");
+      const messageImageInput = document.getElementById("messageImageInput");
 
       const msgText = document.getElementById("msgText");
       const msgTime = document.getElementById("msgTime");
@@ -1168,6 +1174,8 @@
       const typeChips = document.getElementById("typeChips");
       const senderChips = document.getElementById("senderChips");
       const senderField = document.getElementById("senderField");
+      const msgImageField = document.getElementById("msgImageField");
+      const msgImageUpload = document.getElementById("msgImageUpload");
 
       const chatTitleInput = document.getElementById("chatTitleInput");
       const chatSubtitleInput = document.getElementById("chatSubtitleInput");
@@ -1205,6 +1213,11 @@
             (m) => m.id === state.selectedMessageId,
           ) || null
         );
+      }
+
+      function getHeaderProfileMember() {
+        if (state.conversation.type === "group") return null;
+        return state.conversation.members.find((m) => m.id !== "self") || null;
       }
 
       function setAvatarBox(el, url, fallbackText) {
@@ -1245,19 +1258,35 @@
           .map((m) => m.name);
         state.conversation.subtitle =
           names.length > 3
-            ? `${names[0]}, ${names[1]}, ${names[2]} +${names.length - 3}`
+            ? `${names[0]}, ${names[1]} +${names.length - 2}`
             : names.join(", ");
       }
 
+      function rebuildPrivateSubtitle() {
+        if (state.conversation.type !== "private") return;
+        const other = state.conversation.members.find((m) => m.id !== "self");
+        state.conversation.subtitle = other ? `${other.name}, You` : "You";
+      }
+
       function renderHeader() {
+        const headerProfileMember = getHeaderProfileMember();
+
         headerTitleEl.textContent = state.conversation.title;
         headerSubtitleEl.textContent = state.conversation.subtitle;
 
-        setAvatarBox(
-          headerAvatarEl,
-          state.conversation.avatarUrl,
-          initials(state.conversation.title),
-        );
+        if (state.conversation.type === "private" && headerProfileMember) {
+          setAvatarBox(
+            headerAvatarEl,
+            headerProfileMember.avatarUrl || state.conversation.avatarUrl,
+            initials(headerProfileMember.name),
+          );
+        } else {
+          setAvatarBox(
+            headerAvatarEl,
+            state.conversation.avatarUrl,
+            initials(state.conversation.title),
+          );
+        }
 
         if (state.conversation.backgroundUrl) {
           wallpaperEl.style.background = `
@@ -1307,24 +1336,19 @@
 
         senderSelect.disabled = false;
 
-        if (state.conversation.type === "group") {
-          state.conversation.members
-            .filter((m) => m.id !== "self")
-            .forEach((member) => {
-              const opt = document.createElement("option");
-              opt.value = member.id;
-              opt.textContent = member.name;
-              senderSelect.appendChild(opt);
-            });
-        } else {
-          const otherMember = state.conversation.members.find(
-            (m) => m.id !== "self",
-          );
+        const incomingMembers =
+          state.conversation.type === "group"
+            ? state.conversation.members.filter((m) => m.id !== "self")
+            : [state.conversation.members.find((m) => m.id !== "self")].filter(
+                Boolean,
+              );
+
+        incomingMembers.forEach((member) => {
           const opt = document.createElement("option");
-          opt.value = otherMember?.id || "other";
-          opt.textContent = otherMember?.name || "Other";
+          opt.value = member.id;
+          opt.textContent = member.name;
           senderSelect.appendChild(opt);
-        }
+        });
 
         updateComposerModeHint();
       }
@@ -1407,13 +1431,27 @@
           if (msg.type === "image") {
             const media = document.createElement("div");
             media.className = "media-box";
-            media.textContent = "🖼";
+
+            if (msg.imageUrl) {
+              const img = document.createElement("img");
+              img.src = msg.imageUrl;
+              img.alt = "chat-image";
+              media.appendChild(img);
+            } else {
+              const placeholder = document.createElement("div");
+              placeholder.className = "media-placeholder";
+              placeholder.textContent = "🖼";
+              media.appendChild(placeholder);
+            }
+
             bubble.appendChild(media);
 
-            const cap = document.createElement("div");
-            cap.className = "bubble-text";
-            cap.textContent = msg.text || "Image caption";
-            bubble.appendChild(cap);
+            if (msg.text) {
+              const cap = document.createElement("div");
+              cap.className = "bubble-text";
+              cap.textContent = msg.text;
+              bubble.appendChild(cap);
+            }
           }
 
           if (msg.type === "voice") {
@@ -1494,6 +1532,8 @@
           typeChips.appendChild(btn);
         });
 
+        msgImageField.classList.toggle("hidden", msg.type !== "image");
+
         const showSender =
           state.conversation.type === "group" && msg.direction !== "outgoing";
         senderField.classList.toggle("hidden", !showSender);
@@ -1540,10 +1580,12 @@
           setAvatarBox(av, member.avatarUrl, initials(member.name));
 
           const input = document.createElement("input");
+          input.type = "text";
           input.value = member.name;
           input.oninput = (e) => {
             member.name = e.target.value || "Member";
             rebuildGroupSubtitle();
+            rebuildPrivateSubtitle();
             renderAll();
             openSheet("members");
           };
@@ -1590,6 +1632,7 @@
                 }
               });
               rebuildGroupSubtitle();
+              rebuildPrivateSubtitle();
               renderAll();
               openSheet("members");
             };
@@ -1620,26 +1663,6 @@
         if (state.activeSheet === "message") renderMessageSheet();
         if (state.activeSheet === "settings") renderSettingsSheet();
         if (state.activeSheet === "members") renderMembersSheet();
-      }
-
-      function cycleComposerSender() {
-        if (directionSelect.value === "outgoing") {
-          directionSelect.value = "incoming";
-          renderComposerSenderOptions();
-          senderSelect.selectedIndex = 0;
-        } else {
-          if (
-            senderSelect.options.length > 1 &&
-            senderSelect.selectedIndex < senderSelect.options.length - 1
-          ) {
-            senderSelect.selectedIndex += 1;
-          } else {
-            directionSelect.value = "outgoing";
-            renderComposerSenderOptions();
-          }
-        }
-
-        updateComposerModeHint();
       }
 
       function openSheet(name) {
@@ -1683,9 +1706,8 @@
         inlineToolbar.classList.add("show");
       }
 
-      function addComposerMessage() {
+      function createBaseMessage(type, extra = {}) {
         const direction = directionSelect.value;
-        const type = typeSelect.value;
         const senderId = direction === "outgoing" ? "self" : senderSelect.value;
         const text = composerInput.value.trim();
         const time = new Date().toLocaleTimeString([], {
@@ -1693,7 +1715,7 @@
           minute: "2-digit",
         });
 
-        const msg = {
+        return {
           id: uid("msg"),
           type,
           direction,
@@ -1708,14 +1730,44 @@
                   : text,
           time: ["date", "system", "typing"].includes(type) ? "" : time,
           status: direction === "outgoing" ? "sent" : "sent",
+          ...extra,
         };
+      }
 
+      function addComposerTextMessage() {
+        const raw = composerInput.value.trim();
+
+        if (!raw) {
+          typeSelect.value = "voice";
+          composerInput.value = "0:08";
+          addComposerVoiceMessage();
+          return;
+        }
+
+        const msg = createBaseMessage("text");
         state.conversation.messages.push(msg);
         composerInput.value = "";
         composerInput.style.height = "auto";
         state.selectedMessageId = msg.id;
         renderAll();
-        openSheet("message");
+      }
+
+      function addComposerVoiceMessage() {
+        const msg = createBaseMessage("voice");
+        state.conversation.messages.push(msg);
+        composerInput.value = "";
+        composerInput.style.height = "auto";
+        state.selectedMessageId = msg.id;
+        renderAll();
+      }
+
+      function addImageMessage(imageUrl) {
+        const msg = createBaseMessage("image", { imageUrl });
+        state.conversation.messages.push(msg);
+        composerInput.value = "";
+        composerInput.style.height = "auto";
+        state.selectedMessageId = msg.id;
+        renderAll();
       }
 
       function deleteSelected() {
@@ -1758,13 +1810,28 @@
         reader.readAsDataURL(file);
       }
 
+      function waitForImages(root) {
+        const images = [...root.querySelectorAll("img")];
+        if (!images.length) return Promise.resolve();
+
+        return Promise.all(
+          images.map((img) => {
+            if (img.complete) return Promise.resolve();
+            return new Promise((resolve) => {
+              img.onload = resolve;
+              img.onerror = resolve;
+            });
+          }),
+        );
+      }
+
       document.getElementById("newChatBtn").onclick = () => {
         const isGroup = confirm("OK = Group chat\nCancel = Private chat");
         state.conversation = {
           id: uid("conv"),
           type: isGroup ? "group" : "private",
           title: isGroup ? "New Group" : "New Chat",
-          subtitle: isGroup ? "Ali, Budi +1" : "online",
+          subtitle: isGroup ? "Ali, Budi +1" : "Alex, You",
           avatarUrl: "",
           backgroundUrl: "",
           members: isGroup
@@ -1804,38 +1871,24 @@
       directionSelect.onchange = renderComposerSenderOptions;
       senderSelect.onchange = updateComposerModeHint;
 
-      typeSelect.onchange = () => {
-        if (typeSelect.value === "voice") {
-          composerInput.placeholder = "Voice duration, example 0:08";
-        } else if (typeSelect.value === "date") {
-          composerInput.placeholder = "Today";
-        } else if (typeSelect.value === "system") {
-          composerInput.placeholder = "System message";
-        } else if (typeSelect.value === "typing") {
-          composerInput.placeholder = "Typing indicator";
-        } else if (typeSelect.value === "image") {
-          composerInput.placeholder = "Image caption";
-        } else {
-          updateComposerModeHint();
-        }
-      };
-
       composerInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
-          addComposerMessage();
+          addComposerTextMessage();
         }
       });
 
-      document.getElementById("emojiBtn").onclick = () => {
-        composerInput.value += " 😊";
-        composerInput.focus();
+      document.getElementById("galleryBtn").onclick = () => {
+        messageImageInput.click();
       };
 
-      document.getElementById("cameraBtn").onclick = () => {
-        typeSelect.value = "image";
-        composerInput.placeholder = "Image caption";
-        composerInput.focus();
+      messageImageInput.onchange = (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        fileToDataUrl(file, (data) => {
+          addImageMessage(data);
+          messageImageInput.value = "";
+        });
       };
 
       document.getElementById("toolbarEdit").onclick = () => {
@@ -1870,6 +1923,16 @@
         renderConversation();
       };
 
+      msgImageUpload.onchange = (e) => {
+        const msg = getSelectedMessage();
+        const file = e.target.files?.[0];
+        if (!msg || !file) return;
+        fileToDataUrl(file, (data) => {
+          msg.imageUrl = data;
+          renderConversation();
+        });
+      };
+
       dirIncomingBtn.onclick = () => {
         const msg = getSelectedMessage();
         if (!msg) return;
@@ -1878,7 +1941,8 @@
           state.conversation.type === "group"
             ? state.conversation.members.find((m) => m.id !== "self")?.id ||
               "self"
-            : "other";
+            : state.conversation.members.find((m) => m.id !== "self")?.id ||
+              "other";
         renderAll();
         openSheet("message");
       };
@@ -1899,26 +1963,58 @@
       document.getElementById("deleteBtn").onclick = deleteSelected;
 
       document.getElementById("privateBtn").onclick = () => {
+        const oldSelf = state.conversation.members.find((m) => m.id === "self");
+        const oldOther = state.conversation.members.find(
+          (m) => m.id !== "self",
+        );
+
         state.conversation.type = "private";
         state.conversation.members = [
-          { id: "self", name: "You", color: "#8ef0c8", avatarUrl: "" },
-          { id: "other", name: "Alex", color: "#8bc9ff", avatarUrl: "" },
+          {
+            id: "self",
+            name: oldSelf?.name || "You",
+            color: "#8ef0c8",
+            avatarUrl: oldSelf?.avatarUrl || "",
+          },
+          {
+            id: "other",
+            name: oldOther?.name || "Alex",
+            color: "#8bc9ff",
+            avatarUrl: oldOther?.avatarUrl || "",
+          },
         ];
-        state.conversation.subtitle = "online";
+        rebuildPrivateSubtitle();
         state.conversation.messages.forEach((msg) => {
           if (msg.direction === "incoming") msg.memberId = "other";
         });
         renderSettingsSheet();
         renderComposerSenderOptions();
         updateComposerModeHint();
+        renderAll();
       };
 
       document.getElementById("groupBtn").onclick = () => {
         state.conversation.type = "group";
         if (!state.conversation.members.find((m) => m.id === "m1")) {
+          const oldSelf = state.conversation.members.find(
+            (m) => m.id === "self",
+          );
+          const oldOther = state.conversation.members.find(
+            (m) => m.id !== "self",
+          );
           state.conversation.members = [
-            { id: "self", name: "You", color: "#8ef0c8", avatarUrl: "" },
-            { id: "m1", name: "Ali", color: "#8bc9ff", avatarUrl: "" },
+            {
+              id: "self",
+              name: oldSelf?.name || "You",
+              color: "#8ef0c8",
+              avatarUrl: oldSelf?.avatarUrl || "",
+            },
+            {
+              id: "m1",
+              name: oldOther?.name || "Ali",
+              color: "#8bc9ff",
+              avatarUrl: oldOther?.avatarUrl || "",
+            },
             { id: "m2", name: "Budi", color: "#ffd67d", avatarUrl: "" },
           ];
         }
@@ -1934,6 +2030,7 @@
         renderSettingsSheet();
         renderComposerSenderOptions();
         updateComposerModeHint();
+        renderAll();
       };
 
       document.getElementById("settingsCloseBtn").onclick = closeSheets;
@@ -1979,6 +2076,10 @@
       };
 
       document.getElementById("addMemberBtn").onclick = () => {
+        if (state.conversation.type !== "group") {
+          state.conversation.type = "group";
+        }
+
         const count =
           state.conversation.members.filter((m) => m.id !== "self").length + 1;
         state.conversation.members.push({
@@ -1992,27 +2093,37 @@
         openSheet("members");
       };
 
+      document.getElementById("quickAddUserBtn").onclick = () => {
+        if (state.conversation.type !== "group") {
+          document.getElementById("groupBtn").click();
+        }
+        document.getElementById("addMemberBtn").click();
+      };
+
       document.getElementById("membersCloseBtn").onclick = closeSheets;
 
       document.getElementById("exportBtn").onclick = async () => {
         clearSelection();
         closeSheets();
 
-        const composerBar = document.getElementById("composerBar");
-        composerBar.style.display = "none";
+        const editorTopbar = document.getElementById("editorTopbar");
+        editorTopbar.style.display = "none";
 
-        await new Promise((r) => setTimeout(r, 120));
+        await new Promise((r) => setTimeout(r, 150));
+        await waitForImages(document.getElementById("exportStage"));
 
         try {
           const canvas = await html2canvas(
-            document.getElementById("captureArea"),
+            document.getElementById("exportStage"),
             {
-              backgroundColor: "#08101a",
+              backgroundColor: null,
               scale: Math.max(2, window.devicePixelRatio || 2),
               useCORS: true,
               allowTaint: true,
               logging: false,
               imageTimeout: 0,
+              scrollX: 0,
+              scrollY: -window.scrollY,
             },
           );
 
@@ -2027,12 +2138,10 @@
           link.click();
           document.body.removeChild(link);
         } catch (err) {
-          alert(
-            "Export gagal. Coba lagi setelah wallpaper / avatar selesai dimuat.",
-          );
+          alert("Export gagal. Coba lagi setelah semua gambar selesai dimuat.");
           console.error(err);
         } finally {
-          composerBar.style.display = "";
+          editorTopbar.style.display = "";
         }
       };
 
@@ -2057,17 +2166,16 @@
       });
 
       document.getElementById("plusBtn").onclick = () => {
-        cycleComposerSender();
+        if (directionSelect.value === "outgoing") {
+          directionSelect.value = "incoming";
+        } else {
+          directionSelect.value = "outgoing";
+        }
+        renderComposerSenderOptions();
       };
 
-      document.getElementById("voiceBtn").onclick = () => {
-        if ((composerInput.value || "").trim()) {
-          addComposerMessage();
-        } else {
-          typeSelect.value = "voice";
-          composerInput.value = "0:08";
-          addComposerMessage();
-        }
+      document.getElementById("sendBtn").onclick = () => {
+        addComposerTextMessage();
       };
 
       composerInput.addEventListener("input", () => {
@@ -2075,12 +2183,6 @@
         composerInput.style.height =
           Math.min(composerInput.scrollHeight, 110) + "px";
       });
-
-      document.getElementById("cameraBtn").onclick = () => {
-        typeSelect.value = "image";
-        composerInput.placeholder = "Image caption";
-        composerInput.focus();
-      };
 
       renderComposerSenderOptions();
       updateComposerModeHint();
